@@ -1,2 +1,11 @@
+# core
 mcp>=1.0.0
 markitdown[all]
+
+# P1 — OCR (image PDFs)
+pymupdf
+pytesseract
+pillow
+
+# P1 — high-fidelity conversion (optional, heavy: ~2GB models on first run)
+# marker-pdf  # uncomment to enable quality="accurate" backend
