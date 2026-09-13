@@ -100,14 +100,18 @@ def _tier(n: int) -> str:
 
 
 def _is_image_pdf(path: str) -> bool:
-    """True when PDF has no extractable text layer (needs OCR)."""
+    """
+    True when PDF is mostly image-based (needs OCR).
+    Majority vote: if >50% of pages have no extractable text, route to OCR.
+    Handles ResearchGate/cover-wrapped scans that have 1 text page + N image pages.
+    """
     try:
-        import fitz  # PyMuPDF
-        doc = fitz.open(path)
-        for page in doc:
-            if page.get_text().strip():
-                return False
-        return True
+        import pymupdf
+        doc = pymupdf.open(path)
+        if not doc.page_count:
+            return False
+        empty = sum(1 for page in doc if not page.get_text().strip())
+        return empty / doc.page_count > 0.5
     except ImportError:
         return False
 
