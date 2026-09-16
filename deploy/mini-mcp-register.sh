@@ -6,7 +6,7 @@
 set -euo pipefail
 
 MCP_JSON="$HOME/.claude/mcp.json"
-SMELT_URL="http://100.102.102.100:8765/sse"
+SMELT_URL="http://sid-air.local:8765/sse"  # mDNS; fallback: http://192.168.1.50:8765/sse
 
 # Create if missing
 if [ ! -f "$MCP_JSON" ]; then
