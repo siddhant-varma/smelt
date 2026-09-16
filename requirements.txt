@@ -8,4 +8,4 @@ pytesseract
 pillow
 
 # P1 — high-fidelity conversion (optional, heavy: ~2GB models on first run)
-# marker-pdf  # uncomment to enable quality="accurate" backend
+marker-pdf  # quality="accurate" backend — requires Python 3.13+ venv
