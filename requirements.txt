@@ -1,6 +1,7 @@
 # core
-mcp>=1.0.0
+mcp>=1.0.0,<2
 markitdown[all]
+uvicorn  # P2 — SSE transport
 
 # P1 — OCR (image PDFs)
 pymupdf

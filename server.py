@@ -1,5 +1,5 @@
 """
-smelt — universal file ingestion MCP server (P1)
+smelt — universal file ingestion MCP server (P2)
 
 Conversion backends (in priority order for quality="accurate"):
   1. marker-pdf   — layout-aware, table-preserving (optional, install separately)
@@ -16,6 +16,7 @@ Store: ~/smelt-store/chunks.db (SQLite), 6-month TTL, clearance dir on expiry.
 Dedup: SHA-256 on file bytes — same file never re-processed.
 """
 
+import argparse
 import hashlib
 import json
 import os
@@ -27,7 +28,15 @@ from typing import Optional
 from mcp.server.fastmcp import FastMCP
 from markitdown import MarkItDown
 
-mcp = FastMCP("smelt")
+# ── transport setup ──────────────────────────────────────────────────────────
+_parser = argparse.ArgumentParser(add_help=False)
+_parser.add_argument("--transport", choices=["stdio", "sse"], default="stdio")
+_parser.add_argument("--host", default="0.0.0.0")
+_parser.add_argument("--port", type=int, default=8765)
+_args, _ = _parser.parse_known_args()
+
+_sse = _args.transport == "sse"
+mcp = FastMCP("smelt", host=_args.host if _sse else "127.0.0.1", port=_args.port)
 _md = MarkItDown()
 
 # ── store ───────────────────────────────────────────────────────────────────
@@ -371,4 +380,4 @@ def smelt_expire() -> str:
 
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run(transport=_args.transport)
